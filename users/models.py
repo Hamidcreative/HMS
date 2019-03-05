@@ -1,6 +1,7 @@
 from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
+from django.contrib.auth.models import User
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -8,12 +9,42 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
 class Profile(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
-    code = models.TextField()
-    linenos = models.BooleanField(default=False)
-    language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
-    style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
+	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+	title = models.CharField(max_length=100, blank=True, null=True)
+	gender = models.CharField(max_length=15, blank=True, null=True)
+	designation =  models.CharField(max_length=250, blank=True, null=True)
+	qualification = models.CharField(max_length=250, blank=True, null=True)
+	experience = models.CharField(max_length=250, blank=True, null=True)
+	primary_hospital = models.ForeignKey("hospital.Hospital", on_delete=models.SET_NULL, blank=True, null=True)                                    
+	secondary_hospital = models.ForeignKey("hospital.Hospital", on_delete=models.SET_NULL, related_name='secondary_hospital',blank=True, null=True)                                    
+	specialty = models.CharField(max_length=250, blank=True, null=True)
+	mobile_no = models.CharField(max_length=25, blank=True, null=True)
+	timing = models.TextField(blank=True, null=True)
+	avatar = models.CharField(max_length=250, blank=True, null=True)
+	martial_status = models.CharField(max_length=250, blank=True, null=True)
+	weight = models.CharField(max_length=250, blank=True, null=True)
+	height = models.CharField(max_length=250, blank=True, null=True)
+	blood_type = models.CharField(max_length=250, blank=True, null=True)
+	notes = models.TextField(blank=True, null=True)
+	created_date = models.DateTimeField(auto_now_add=True)
+	modified_date = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        ordering = ('created',)
+
+class Appointment(models.Model):
+	student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student')    
+	doctor = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='doctor', blank=True, null=True)
+	datetime = models.DateTimeField()
+	disease = models.TextField()
+	notes = models.TextField(blank=True, null=True)
+	status = models.BooleanField(default=True)
+	created_date = models.DateTimeField(auto_now_add=True)
+	modified_date = models.DateTimeField(auto_now=True)
+
+class Prescription(models.Model):
+	appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)  
+	how_to_use = models.TextField(blank=True, null=True)
+	medicine_name = models.CharField(max_length=250, blank=True, null=True)
+	medicine_type = models.ForeignKey("hospital.MedicineType", on_delete=models.SET_NULL, blank=True, null=True)
+	created_date = models.DateTimeField(auto_now_add=True)
+	modified_date = models.DateTimeField(auto_now=True)
+	
