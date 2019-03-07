@@ -1,54 +1,64 @@
 from django.shortcuts import render
-
-
-
 from rest_framework import status
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from users.models import Profile
-from users.serializers import UsersSerializer
+from users.serializers import UsersSerializer,DoctorsSerializer,StudentSerializer
+from django.http import Http404
+from rest_framework import mixins
+from rest_framework import generics
+from users.permissions import IsOwnerOrReadOnly
+from rest_framework.reverse import reverse
+from rest_framework import viewsets
+from rest_framework import permissions
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UsersSerializer
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 
-#@csrf_exempt  #Note that because we want to be able to POST to this view from clients that won't have a CSRF token we need to mark the view as csrf_exempt
-@api_view(['GET', 'POST'])
-def users_list(request, format=None):
-    if request.method == 'GET':
-        users = Profile.objects.all()
-        serializer = UsersSerializer(users, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = UsersSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, pk, format=None):
-    """
-    Retrieve, update or delete a code user.
-    """
-    try:
-        profile = Profile.objects.get(pk=pk)
-    except Profile.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = UsersSerializer(snippet)
-        return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = UsersSerializer(profile, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
-        profile.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DoctorsViewSet(viewsets.ModelViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = DoctorsSerializer
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+    def perform_create(self, serializer):
+       serializer.save(user=self.request.user)
+
+class StudentViewSet(viewsets.ModelViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = StudentSerializer
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
+
+    def perform_create(self, serializer):
+       serializer.save(user=self.request.user)
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('Userlist', request=request, format=format),
+    })
+
+def users_listing(request):
+    return render(request,'users/users.html')
+
+def users_dashboard(request):
+    return render(request,'users/dashboard.html')
 
 

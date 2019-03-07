@@ -2,6 +2,10 @@ from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 from django.contrib.auth.models import User
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
+
 
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -28,6 +32,14 @@ class Profile(models.Model):
 	notes = models.TextField(blank=True, null=True)
 	created_date = models.DateTimeField(auto_now_add=True)
 	modified_date = models.DateTimeField(auto_now=True)
+
+	class Meta:
+	    ordering = ('created_date',)
+
+	#def save(self, *args, **kwargs):
+	#    title = get_lexer_by_name(self.title)
+	#    gender = 'table' if self.gender else False
+	#    super(Profile, self).save(*args, **kwargs)
 
 
 class Appointment(models.Model):

@@ -34,7 +34,8 @@
         },
         "mysqlclient": {
             "hashes": [
-                "sha256:b95edaa41d6cc47deecabcdcbb5ab437ad9ae6d8955f5cf10d1847b37e66ef5e"
+                "sha256:b95edaa41d6cc47deecabcdcbb5ab437ad9ae6d8955f5cf10d1847b37e66ef5e",
+                "sha256:bc84f789cefaa726126d05b0321bef0975a3992699c417f71e95e936d6ba5b07"
             ],
             "path": "./mysqlclient-1.4.2-cp36-cp36m-win32.whl",
             "version": "==1.4.2"
