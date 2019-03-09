@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4855da4936017c3faa3fb7b0b81fac978295ddd38ca6641729d1e66316a89fa4"
+            "sha256": "c8e22f24e1dc2c28071d212a97782549161e26267645549a96da9c6edb1916ac"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -24,6 +24,14 @@
             "index": "pypi",
             "version": "==2.1.7"
         },
+        "django-crispy-forms": {
+            "hashes": [
+                "sha256:5952bab971110d0b86c278132dae0aa095beee8f723e625c3d3fa28888f1675f",
+                "sha256:705ededc554ad8736157c666681165fe22ead2dec0d5446d65fc9dd976a5a876"
+            ],
+            "index": "pypi",
+            "version": "==1.7.2"
+        },
         "djangorestframework": {
             "hashes": [
                 "sha256:8a435df9007c8b7d8e69a21ef06650e3c0cbe0d4b09e55dd1bd74c89a75a9fcd",
@@ -31,6 +39,14 @@
             ],
             "index": "pypi",
             "version": "==3.9.2"
+        },
+        "djangorestframework-datatables": {
+            "hashes": [
+                "sha256:a8c0671fb5390e70962fcabac7099f3f9140a84dee1b1eb9acbce800a42407f3",
+                "sha256:cccd8eb82fc4b398e7c0419a4c08b13ddbabc09f3f2604be397de469f9059e5e"
+            ],
+            "index": "pypi",
+            "version": "==0.4.1"
         },
         "mysqlclient": {
             "hashes": [

@@ -46,6 +46,7 @@
 
     <!-- Responsive.css-->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}">
 
 
 
@@ -130,7 +131,7 @@
                     <li class="dropdown">
                         <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
                             <span><img class="img-circle " src="{% static 'assets/images/avatar-1.png' %}" style="width:40px;" alt="User Image"></span>
-                            <span>John <b>Doe</b> <i class=" icofont icofont-simple-down"></i></span>
+                            <span>Super <b>Admin</b> <i class=" icofont icofont-simple-down"></i></span>
 
                         </a>
                         <ul class="dropdown-menu settings-menu">
@@ -141,7 +142,8 @@
                                 <div class="dropdown-divider m-0"></div>
                             </li>
                             <li><a href="#"><i class="icon-lock"></i> Lock Screen</a></li>
-                            <li><a href="login1.html"><i class="icon-logout"></i> Logout</a></li>
+                            <li><a href="{% url 'logout' %}?next=/login"><i class="icon-logout"></i><span> Logout</span></a></li>
+
 
                         </ul>
                     </li>
@@ -219,17 +221,17 @@
                     <ul class="treeview-menu">
                         <li><a class="waves-effect waves-dark" href="{% url 'users_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Users</span></a></li>
                         <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add User</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Doctors</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Student</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'doctors_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Doctors</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'student_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Student</span></a></li>
                     </ul>
                 </li>
 
                 <li class="treeview">
-                    <a class="waves-effect waves-dark" href="index.html">
+                    <a class="waves-effect waves-dark" href="#">
                         <i class="ti-layout-list-post text-custom"></i><span> Hospital</span><i class="icon-arrow-down"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Hospitals</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'hospitals-listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Hospitals</span></a></li>
                         <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add Hospital</span></a></li>
                         <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add Doctors Info</span></a></li>
                     </ul>
@@ -253,6 +255,7 @@
                 </li>
 
                 <li><a href="#"><i class="ti-settings text-custom"></i><span> Setting</span></a> </li>
+                <li><a href="{% url 'logout' %}?next=/login"><i class="icon-logout text-custom"></i><span> Logout</span></a> </li>
 
 
             </ul>
@@ -546,8 +549,11 @@
 <![endif]-->
 <!-- Warning Section Ends -->
 
-<!-- Required Jqurey -->
+
 <script src="{% static 'bower_components/Jquery/dist/jquery.min.js' %}"></script>
+
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -585,7 +591,8 @@
 <script type="text/javascript" src="{% static 'assets/pages/dashboard.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/pages/elements.js' %}"></script>
 <script src="{% static 'assets/js/menu.min.js' %}"></script>
-
+<script src="{% static 'custom.js' %}"></script>
+{% block footer %} {% endblock %}
 
 </body>
 

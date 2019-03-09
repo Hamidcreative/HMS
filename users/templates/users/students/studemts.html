@@ -8,11 +8,11 @@
     <div class="row">
         <div class="col-sm-12 p-0">
             <div class="main-header">
-                <h4>Users</h4>
+                <h4>Students</h4>
                 <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
                     <li class="breadcrumb-item"><a href="index.html"><i class="icofont icofont-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item"><a href="#!">Users</a>
+                    <li class="breadcrumb-item"><a href="#!">Students</a>
                     </li>
                     <li class="breadcrumb-item"><a href="#">List</a>
                     </li>
@@ -27,10 +27,10 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                     <h5 class="card-header-text">Users List</h5></div>
+                    <h5 class="card-header-text">Students List</h5></div>
                 <div class="card-block">
                     <div class="table-responsive" data-pattern="priority-columns">
-                        <table cellspacing="0" id="albums"  class="datatable table table-small-font table-bordered table-striped">
+                        <table cellspacing="0" id="students"  class="datatable table table-small-font table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th data-priority="1">ID</th>
@@ -38,8 +38,14 @@
                                 <th data-priority="3">First Name</th>
                                 <th data-priority="4">Last Name</th>
                                 <th data-priority="5">Email</th>
+                                <th data-priority="5">Title</th>
+                                <th data-priority="5">Gender</th>
+                                <th data-priority="5">Mobile No</th>
                                 <th data-priority="6">Status</th>
                                 <th data-priority="6">Action</th>
+
+
+
 
                             </tr>
                             </thead>
@@ -56,18 +62,21 @@
 {% block footer %}
 <script>
     jQuery(document).ready(function($) {
-        var table = $('#albums').DataTable({
+        var table = $('#students').DataTable({
             "serverSide": true,
             "responsive": true,
-            "ajax": "/users?format=datatables",
+            "ajax": "/students?format=datatables",
             "columns": [
-                {"data": "id", "searchable": false},
-                {"data": "username"},
+                {"data": "user_id", "searchable": false},
+                {"data": "user"},
                 {"data": "first_name"},
                 {"data": "last_name"},
                 {"data": "email"},
+                {"data": "title"},
+                {"data": "gender"},
+                {"data": "mobile_no"},
                 {
-                    data: "is_active",
+                data: "is_active",
                     render: function ( data, type, row, meta ) {
                         var status,StatusClass = '';
                         if(row.is_active === true ){
