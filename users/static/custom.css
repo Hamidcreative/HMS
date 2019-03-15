@@ -6,7 +6,7 @@ div.dataTables_paginate,div.dataTables_filter {
 .dataTables_length label{
     display: inline-flex;
 }
-button.tabledit-edit-button.btn.btn-primary.waves-effect.waves-light {
+a.tabledit-edit-button.btn.btn-primary.waves-effect.waves-light {
     margin-right: 5px;
 }
 .login-card {
