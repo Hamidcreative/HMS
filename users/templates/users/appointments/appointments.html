@@ -8,11 +8,11 @@
     <div class="row">
         <div class="col-sm-12 p-0">
             <div class="main-header">
-                <h4>Students</h4>
+                <h4>Appointments</h4>
                 <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
                     <li class="breadcrumb-item"><a href="index.html"><i class="icofont icofont-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item"><a href="#!">Students</a>
+                    <li class="breadcrumb-item"><a href="#!">Appointments</a>
                     </li>
                     <li class="breadcrumb-item"><a href="#">List</a>
                     </li>
@@ -27,26 +27,20 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-header-text">Students List</h5></div>
+                    <h5 class="card-header-text">Appointments List</h5></div>
                 <div class="card-block">
                     <div class="table-responsive" data-pattern="priority-columns">
-                        <table cellspacing="0" id="students"  class="datatable table table-small-font table-bordered table-striped">
+                        <table cellspacing="0" id="appointments"  class="datatable table table-small-font table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th data-priority="1">ID</th>
-                                <th data-priority="2">User Name</th>
-                                <th data-priority="3">First Name</th>
-                                <th data-priority="4">Last Name</th>
-                                <th data-priority="5">Email</th>
-                                <th data-priority="5">Title</th>
-                                <th data-priority="5">Gender</th>
-                                <th data-priority="5">Mobile No</th>
+                                <th data-priority="2">Student</th>
+                                <th data-priority="6">Doctor</th>
+                                <th data-priority="6">Date Time</th>
+                                <th data-priority="6">Disease</th>
+                                <th data-priority="6">Notes</th>
                                 <th data-priority="6">Status</th>
                                 <th data-priority="6">Action</th>
-
-
-
-
                             </tr>
                             </thead>
 
@@ -58,30 +52,30 @@
     </div>
     <!-- Row end -->
 </div>
-{% endblock %}
-{% block footer %}
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
     jQuery(document).ready(function($) {
-        var table = $('#students').DataTable({
+        var table = $('#appointments').DataTable({
             "serverSide": true,
             "responsive": true,
             "ajax":{
-                url:"api/students?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
-            },
+                url:"api/appointments?format=datatables",
+                headers: { 'Authorization': 'Token {{token}}' },
+                },
             "columns": [
-                {"data": "user_id", "searchable": false},
-                {"data": "user"},
-                {"data": "first_name"},
-                {"data": "last_name"},
-                {"data": "email"},
-                {"data": "title"},
-                {"data": "gender"},
-                {"data": "mobile_no"},
+                {"data": "id", "searchable": false},
+                {"data": "student"},
+                {"data": "doctor"},
+                {"data": "datetime"},
+                {"data": "disease"},
+                {"data": "notes"},
                 {
-                data: "is_active",
+                    data: "status",
                     render: function ( data, type, row, meta ) {
                         var status,StatusClass = '';
-                        if(row.is_active === true ){
+                        if(row.status === true ){
                             status = 'Active';
                             StatusClass='btn-success';
                         }else{
@@ -101,6 +95,7 @@
 
             ],
         });
+
     });
 </script>
 

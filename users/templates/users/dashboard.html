@@ -7,48 +7,48 @@
 <div class="container-fluid">
     <div class="row">
         <div class="main-header">
-            <h4>Dashboard</h4>
+            <h4>Dashboard </h4>
         </div>
     </div>
     <!-- 4-blocks row start -->
     <div class="row dashboard-header">
         <div class="col-lg-3 col-md-4">
             <div class="card dashboard-product">
-                <span>Hospitals</span>
-                <h2 class="dashboard-total-products">2</h2>
-                <span class="label label-warning"></span>
-                <div class="side-box">
-                    <i class="ti-signal text-warning-color"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="card dashboard-product">
-                <span>Doctors</span>
-                <h2 class="dashboard-total-products">1</h2>
-                <span class="label label-primary"></span>
-                <div class="side-box ">
-                    <i class="ti-gift text-primary-color"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-4">
-            <div class="card dashboard-product">
-                <span>Students</span>
-                <h2 class="dashboard-total-products">1</h2>
+                <span>Users</span>
+                <h2 class="dashboard-total-products total_students"></h2>
                 <span class="label label-success"></span>
                 <div class="side-box">
-                    <i class="ti-direction-alt text-success-color"></i>
+                    <i class="ti-user text-success-color"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+            <div class="card dashboard-product">
+                <span>Hospitals</span>
+                <h2 class="dashboard-total-products total_hospitals"></h2>
+                <span class="label label-warning"></span>
+                <div class="side-box">
+                    <i class="ti-layout-list-post   text-warning-color"></i>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-4">
             <div class="card dashboard-product">
                 <span>Appointments</span>
-                <h2 class="dashboard-total-products">30,780</h2>
+                <h2 class="dashboard-total-products total_appointments"></h2>
                 <span class="label label-danger"></span>
                 <div class="side-box">
-                    <i class="ti-rocket text-danger-color"></i>
+                    <i class="ti-receipt text-danger-color"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-4">
+            <div class="card dashboard-product">
+                <span>Doctors</span>
+                <h2 class="dashboard-total-products total_doctors"></h2>
+                <span class="label label-primary"></span>
+                <div class="side-box ">
+                    <i class="ti-user text-primary-color"></i>
                 </div>
             </div>
         </div>
@@ -59,32 +59,44 @@
     <!-- 2-1 block start -->
     <div class="row">
         <div class="col-xl-4 col-lg-12">
+            <div class="card">
+                <div class="card-block">
+
+                    <div class="table-responsive">
+                        <h6 class="p-20">Users</h6>
+                        <table cellspacing="0" id="students"  class="datatable table table-small-font table-bordered table-striped">
+                            <thead>
+                            <tr>
+
+                                <th data-priority="2">Name</th>
+                                <th data-priority="5">Email</th>
+                                <th data-priority="6">Status</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+                        <h6 class="p-l-20"><a href="{% url 'student_listing' %}">View all</a></h6>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-12">
         <div class="card">
             <div class="card-block">
 
                 <div class="table-responsive">
                     <h6 class="p-20">Hospitals</h6>
-                    <table class="table m-b-0 photo-table">
+                    <table cellspacing="0" id="hospitals"  class="datatable table table-small-font table-bordered table-striped">
                         <thead>
-                        <tr class="text-uppercase">
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Added Date</th>
-
+                        <tr>
+                            <th data-priority="2">Name</th>
+                            <th data-priority="2">Detail</th>
+                            <th data-priority="6">Status</th>
                         </tr>
                         </thead>
-                        <tbody>
-
-                        <tr>
-                            <td>Name</td>
-                            <td>Active</td>
-                            <td>October 21, 2015</td>
-
-                        </tr>
-
-
-                        </tbody>
                     </table>
+                    <h6 class="p-l-20"><a href="{% url 'hospitals-listing' %}">View all</a></h6>
                 </div>
             </div>
         </div>
@@ -94,125 +106,22 @@
                 <div class="card-block">
 
                     <div class="table-responsive">
-                        <h6 class="p-20">Students</h6>
-                        <table class="table m-b-0 photo-table">
+                        <h6 class="p-20">Appointments</h6>
+                        <table cellspacing="0" id="appointments"  class="datatable table table-small-font table-bordered table-striped">
                             <thead>
-                            <tr class="text-uppercase">
-                                <th>Photo</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Date</th>
+                            <tr>
+                                <th data-priority="2">Student</th>
+                                <th data-priority="6">Doctor</th>
+                                <th data-priority="6">Date Time</th>
+                                <th data-priority="6">Disease</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-2.png' %}" alt="User">
-                                </th>
-                                <td>Appestia Project
-                                    <p><i class="icofont icofont-clock-time"></i>Created 14.9.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">226,134</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 1 1 4.209902994920235 25.41987555688496 L 15 15" fill="#2196F3"></path><path d="M 4.209902994920235 25.41987555688496 A 15 15 0 0 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>50%</td>
-                                <td>October 21, 2015</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-4.png' %}" alt="User">
-                                </th>
-                                <td>Contract with belife Company
-                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>70%</td>
-                                <td>November 21, 2015</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-1.png' %}" alt="User">
-                                </th>
-                                <td>Web Consultancy project
-                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">1,4</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 29.265847744427305 10.36474508437579 L 15 15" fill="#2196F3"></path><path d="M 29.265847744427305 10.36474508437579 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>40%</td>
-                                <td>September 21, 2015</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-3.png' %}" alt="User">
-                                </th>
-                                <td>Contract with belife Company
-                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>70%</td>
-                                <td>November 21, 2015</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-1.png' %}" alt="User">
-                                </th>
-                                <td>Contract with belife Company
-                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>70%</td>
-                                <td>November 21, 2015</td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <img class="img-fluid img-circle" src="{% static 'assets/images/avatar-2.png' %}" alt="User">
-                                </th>
-                                <td>Contract with belife Company
-                                    <p><i class="icofont icofont-clock-time"></i>Created 20.10.2016</p>
-                                </td>
-                                <td>
-                                    <span class="pie" style="display: none;">0.52/1.561</span><svg class="peity" height="30" width="30"><path d="M 15.000000000000002 0 A 15 15 0 0 1 28.00043211809656 22.482564048691025 L 15 15" fill="#2196F3"></path><path d="M 28.00043211809656 22.482564048691025 A 15 15 0 1 1 14.999999999999996 0 L 15 15" fill="#ccc"></path></svg>
-                                </td>
-                                <td>70%</td>
-                                <td>November 21, 2015</td>
-                            </tr>
-
-                            </tbody>
                         </table>
+                        <h6 class="p-l-20"><a href="{% url 'appointments_listing' %}">View all</a></h6>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-xl-4 col-lg-12">
-            <div class="card">
-                <div class="card-block">
-
-                    <div class="table-responsive">
-                        <h6 class="p-20">Students</h6>
-                        <table cellspacing="0" id="albums"  class="datatable table table-small-font table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th data-priority="2">Full Name</th>
-                                <th data-priority="5">Email</th>
-                                <th data-priority="6">Status</th>
-                            </tr>
-                            </thead>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
     </div>
     <!-- 2-1 block end -->
@@ -224,17 +133,16 @@
 {% csrf_token %}
 <script>
     jQuery(document).ready(function($) {
-        var table = $('#albums').DataTable({
+        var table = $('#students').DataTable({
+            "dom": '<"top">t<"bottom"><"clear">',
             "serverSide": true,
             "responsive": true,
-            "bFilter" : false,
-            "bJQueryUI" : true,
-            "sPaginationType" : "full_numbers",
-            "bPaginate": false,
-            "bInfo": false,
-            "order": [[ 0, "desc" ]],
-            "ajax": "/users?format=datatables",
+            "pageLength":5,
+            "ajax":{
+              url:"api/users?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+            },
             "columns": [
+
                 {"data": "username"},
                 {"data": "email"},
                 {
@@ -251,9 +159,67 @@
                         return '<button class="tabledit-edit-button btn btn-mini waves-effect waves-light '+StatusClass+'">'+ status +'</button>';
                     }
                 },
-
             ],
         });
+
+        var table = $('#hospitals').DataTable({
+            "dom": '<"top">t<"bottom"><"clear">',
+            "serverSide": true,
+            "responsive": true,
+            "pageLength":5,
+            "ajax":{
+                url:"api/hospitals?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+            },
+            "columns": [
+                {"data": "name"},
+                {"data": "detail"},
+                {
+                    data: "status",
+                    render: function ( data, type, row, meta ) {
+                        var status,StatusClass = '';
+                        if(row.status === true ){
+                            status = 'Active';
+                            StatusClass='btn-success';
+                        }else{
+                            status = 'In-Active';
+                            StatusClass='btn-danger';
+                        }
+                        return '<button class="tabledit-edit-button btn btn-mini waves-effect waves-light '+StatusClass+'">'+ status +'</button>';
+                    }
+                },
+
+
+            ],
+
+        });
+
+        var table = $('#appointments').DataTable({
+            "dom": '<"top">t<"bottom"><"clear">',
+            "serverSide": true,
+            "responsive": true,
+            "pageLength":5,
+            "ajax":{
+                url:"api/appointments?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+            },
+            "columns": [
+
+                {"data": "student"},
+                {"data": "doctor"},
+                {
+                    data: "datetime",
+                    render: function ( data, type, row, meta ) {
+                       return  row.datetime;
+                    }
+                },
+                {"data": "disease"},
+            ],
+        });
+        setTimeout(function(){
+            $('.total_hospitals').text($('#hospitals').DataTable().page.info().recordsTotal);
+            $('.total_doctors').text(5);
+            $('.total_students').text($('#students').DataTable().page.info().recordsTotal);
+            $('.total_appointments').text($('#appointments').DataTable().page.info().recordsTotal);
+        },500);
     });
 </script>
 

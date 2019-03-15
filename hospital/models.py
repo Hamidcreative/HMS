@@ -3,16 +3,17 @@ from django.db import models
 # Create your models here.
 
 class Hospital(models.Model):
-	description = models.CharField(max_length=250)
+	name = models.CharField(max_length=250)
+	detail = models.TextField(blank=True,null=True)
 	status = models.BooleanField(default=True)
 	created_date = models.DateTimeField(auto_now_add=True)
 	modified_date = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return '{}'.format(self.description) 
+		return '{}'.format(self.name)
 		
 	class Meta:
-		ordering = ['description']
+		ordering = ['-created_date']
 
 class MedicineType(models.Model):
 	name = models.CharField(max_length=250)

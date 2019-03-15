@@ -61,7 +61,7 @@
     <!-- Navbar-->
     <header class="main-header-top hidden-print">
         <!--<a href="{%  url 'users_dashboard' %}" class="logo"><img class="img-fluid able-logo" src="{% static 'assets/images/logo.png' %}" alt="Hospital"></a>-->
-        <a href="{%  url 'users_dashboard' %}" class="logo">Hospital</a>
+        <a href="{%  url 'users_dashboard' %}" class="logo"> {{username}} Portal </a>
         <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->
             <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
@@ -162,12 +162,12 @@
                         <div class="dummy-column">
                             <h2>People</h2>
                             <a class="dummy-media-object" href="#!">
-                                <img class="round" src="http://0.gravatar.com/avatar/81b58502541f9445253f30497e53c280?s=50&d=identicon&r=G" alt="Sara Soueidan" />
+                                <img class="round" src="{% static 'assets/images/avatar-1.png' %}" alt="Sara Soueidan" />
                                 <h3>Sara Soueidan</h3>
                             </a>
 
                             <a class="dummy-media-object" href="#!">
-                                <img class="round" src="http://1.gravatar.com/avatar/9bc7250110c667cd35c0826059b81b75?s=50&d=identicon&r=G" alt="Shaun Dona" />
+                                <img class="round" src="{% static 'assets/images/avatar-1.png' %}" alt="Shaun Dona" />
                                 <h3>Shaun Dona</h3>
                             </a>
                         </div>
@@ -219,10 +219,10 @@
                         <i class="ti-user text-custom"></i><span> Users</span><i class="icon-arrow-down"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a class="waves-effect waves-dark" href="{% url 'users_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Users</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add User</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="{% url 'doctors_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Doctors</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="{% url 'student_listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Student</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'users_listing' %}" target="k"><i class="icon-arrow-right"></i><span> Users</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'add_user' %}" target=""><i class="icon-arrow-right"></i><span> Add User</span></a></li>
+                        <!--<li><a class="waves-effect waves-dark" href="{% url 'doctors_listing' %}" target=""><i class="icon-arrow-right"></i><span> Doctors</span></a></li>-->
+                        <!--<li><a class="waves-effect waves-dark" href="{% url 'student_listing' %}" target=""><i class="icon-arrow-right"></i><span> Student</span></a></li>-->
                     </ul>
                 </li>
 
@@ -231,26 +231,18 @@
                         <i class="ti-layout-list-post text-custom"></i><span> Hospital</span><i class="icon-arrow-down"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a class="waves-effect waves-dark" href="{% url 'hospitals-listing' %}" target="_blank"><i class="icon-arrow-right"></i><span> Hospitals</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add Hospital</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add Doctors Info</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'hospitals-listing' %}" target=""><i class="icon-arrow-right"></i><span> Hospitals</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'add_hospitals' %}" target=""><i class="icon-arrow-right"></i><span> Add Hospital</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="#" target=""><i class="icon-arrow-right"></i><span> Add Doctors Info</span></a></li>
                     </ul>
                 </li>
-                <li class="treeview">
-                    <a class="waves-effect waves-dark" href="index.html">
-                        <i class="ti-layout-list-post text-custom"></i><span> Pharmacy</span><i class="icon-arrow-down"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Pharmacy</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Add Pharmacy</span></a></li>
-                    </ul>
-                </li>
+
                  <li class="treeview">
                     <a class="waves-effect waves-dark" href="index.html">
                         <i class="ti-receipt text-custom"></i><span> Appointments</span><i class="icon-arrow-down"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a class="waves-effect waves-dark" href="#" target="_blank"><i class="icon-arrow-right"></i><span> Appointments</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'appointments_listing' %}" target=""><i class="icon-arrow-right"></i><span> Appointments</span></a></li>
                     </ul>
                 </li>
 
@@ -552,11 +544,16 @@
 
 <script src="{% static 'bower_components/Jquery/dist/jquery.min.js' %}"></script>
 
-<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="{% static 'assets/js/jquery.dataTables.min.js' %}"></script>
+
+<script src="{% static 'assets/js/dataTables.bootstrap4.min.js' %}"></script>
+
+
+
+
 <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+ <script src="{% static 'assets/js/popper.min.js' %}"></script>
 <script src="{% static 'bower_components/tether/dist/js/tether.min.js' %}"></script>
 
 <!-- Required Fremwork -->
@@ -572,6 +569,8 @@
 <!-- notification -->
 <script src="{% static 'assets/plugins/notification/js/bootstrap-growl.min.js' %}"></script>
 
+<script src="{% static 'assets/js/jquery.toaster.js' %}"></script>
+
 <!-- Sparkline charts -->
 <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
 
@@ -582,9 +581,12 @@
 <!-- Echart js -->
 <script src="{% static 'assets/plugins/charts/echarts/js/echarts-all.js' %}"></script>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+
+<script src="{% static 'assets/js/highcharts.js' %}"></script>
+<script src="{% static 'assets/js/exporting.js' %}"></script>
+<script src="{% static 'assets/js/highcharts-3d.js' %}"></script>
+
+
 
 <!-- custom js -->
 <script type="text/javascript" src="{% static 'assets/js/main.min.js' %}"></script>
@@ -592,7 +594,10 @@
 <script type="text/javascript" src="{% static 'assets/pages/elements.js' %}"></script>
 <script src="{% static 'assets/js/menu.min.js' %}"></script>
 <script src="{% static 'custom.js' %}"></script>
-{% block footer %} {% endblock %}
+{% block footer %}
+
+
+{% endblock %}
 
 </body>
 

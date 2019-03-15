@@ -8,7 +8,7 @@ class HospitalSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Hospital
-        fields = ('id','description','status','created_date','modified_date')
+        fields = ('id','name','detail','status','created_date','modified_date')
         datatables_always_serialize = ('id',)
 
 

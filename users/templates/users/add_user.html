@@ -1,0 +1,96 @@
+{% extends "users/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 p-0">
+            <div class="main-header">
+                <h4>{{ app|capfirst }}</h4>
+                <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
+                    <li class="breadcrumb-item"><a href="index.html"><i class="icofont icofont-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="#!"> {{ app|capfirst }} </a>
+                    </li>
+                    <li class="breadcrumb-item"><a href="#">
+                        {% if user.id  %} Edit  {% else %} Add  {% endif %}
+                    </a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-block">
+                        <form method="POST" class="form" action="{% url app %}">
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">{% if user.id  %} Edit  {{ app|capfirst }}  {% else %} Add {{ app|capfirst }} {% endif %}</legend>
+                                {{ form|crispy }}
+                                <legend class="border-bottom mb-4">{% if group  %} {{group}} Info  {% endif %}</legend>
+
+                                {{ group_form|crispy }}
+
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-info save" type="submit">Save </button>
+                                <p class="text-danger" id="error"> </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+<script>
+    jQuery(document).ready(function($) {
+        function Validate() {
+            var password = document.getElementById("id_password1").value;
+            var confirmPassword = document.getElementById("id_password2").value;
+            if (password != confirmPassword) {
+                $("#error").text("Passwords do not match.");// we will update validation for rest frame work latter
+                return false;
+            }
+            return true;
+        }
+        var id = false;
+        var url ='';
+        id = "{{user.id}}";
+        if(id){
+            url = "{% url app_url %}"+'/'+"{{user.id}}"+'/';
+        }else{
+            url = "{% url app_url %}";
+        }
+        $(document).on('click','.save',function(e){
+            e.preventDefault();
+           // if( Validate() === true ) {
+                var array = $('form.form').serializeArray();
+                var from_data = {};
+                jQuery.each(array, function () {
+                        from_data[this.name] = this.value || '';
+                });
+            console.log(from_data);
+//                $.ajax({
+//                    type: '{{type}}',
+//                    url: url,
+//                    headers: {'Authorization': "Token {{request|getToken}}", 'Content-Type': 'application/json'},
+//                    data: JSON.stringify(from_data),
+//                    success: function (data) {
+//                        $.toaster({ priority : 'success', title : 'Status', message : 'User Status Updated!'});
+//                        window.location.href = "{% url 'users_listing' %}";
+//
+//
+//                    }
+//                });
+            //}
+        })
+
+    });
+</script>
+{% endblock %}

@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'default.middleware.authenticatemiddleware.AuthenticateMiddleware',
 ]
 
 ROOT_URLCONF = 'restapi.urls'
@@ -86,8 +87,9 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages'
             ],
+            'builtins': ['default.templatetags.custom_tags'],
         },
     },
 ]
@@ -138,12 +140,14 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+DATE_FORMAT = 'Y-m-d'
+TIME_FORMAT = 'H:i:s'
+#USE_I18N = True
 
-USE_L10N = True
+#USE_L10N = False
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

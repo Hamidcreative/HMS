@@ -34,7 +34,8 @@
                             <thead>
                             <tr>
                                 <th data-priority="1">ID</th>
-                                <th data-priority="2">Description</th>
+                                <th data-priority="1">Name</th>
+                                <th data-priority="2">Details</th>
                                 <th data-priority="6">Status</th>
                                 <th data-priority="6">Action</th>
 
@@ -49,18 +50,20 @@
     </div>
     <!-- Row end -->
 </div>
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+{% endblock %}
+{% block footer %}
 <script>
     jQuery(document).ready(function($) {
         var table = $('#hospitals').DataTable({
             "serverSide": true,
             "responsive": true,
-            "ajax": "/hospitals?format=datatables",
+            "ajax":{
+                url:"api/hospitals?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+            },
             "columns": [
                 {"data": "id", "searchable": false},
-                {"data": "description"},
+                {"data": "name"},
+                {"data": "detail"},
                 {
                     data: "status",
                     render: function ( data, type, row, meta ) {
@@ -72,20 +75,50 @@
                             status = 'In-Active';
                             StatusClass='btn-danger';
                         }
-                        return '<button class="tabledit-edit-button btn btn-mini waves-effect waves-light '+StatusClass+'">'+ status +'</button>';
+                        return '<a href="api/hospitals/'+row.id+'/" data-status="'+row.status+'" class="tabledit-status-button btn btn-mini waves-effect waves-light '+StatusClass+'">'+ status +'</a>';
                     }
                 },
                 {
                     data: "action",
                     render: function ( data, type, row, meta ) {
-                        return '<button  class="tabledit-edit-button btn btn-mini btn-primary waves-effect waves-light"><span class="icofont icofont-ui-edit"></span></button>' +
-                                '<button  class="tabledit-delete-button btn btn-mini btn-danger waves-effect waves-light"><span class="icofont icofont-ui-delete"></span></button>';
+                        return '<a  href="hospitals/'+row.id+'/" class="tabledit-edit-button btn btn-mini btn-primary waves-effect waves-light"><span class="icofont icofont-ui-edit"></span></a>' +
+                                '<a href="api/hospitals/'+row.id+'/"  class="tabledit-delete-button btn btn-mini btn-danger waves-effect waves-light"><span class="icofont icofont-ui-delete"></span></a>';
                     }
                 },
 
             ],
         });
+            $(document).on('click','.tabledit-delete-button',function(e){
+                e.preventDefault();
+                var url ='';
+                url = $(this).attr("href");
+                $.ajax({
+                    type:'DELETE',
+                    url:url,
+                    headers: { 'Authorization': "Token {{request|getToken}}",'Content-Type': 'application/json'},
+                    success:function(data){
+                            table.draw(false);
+                    }
+                });
+            })
+            $(document).on('click','.tabledit-status-button',function(e){
+                e.preventDefault();
+                var url ='';
+                url = $(this).attr("href");
+                status = $(this).data("status");
+                console.log(status);
+                status = status == 'true' ? status = false : status = true;
+                $.ajax({
+                    type:'PATCH',
+                    url:url,
+                    headers: { 'Authorization': "Token {{request|getToken}}",'Content-Type': 'application/json'},
+                    data:JSON.stringify({ "status": status }),
+                    success:function(data){
+                            table.draw(false);
+                    }
+                });
+            })
     });
 </script>
-
 {% endblock %}
+

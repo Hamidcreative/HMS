@@ -1,16 +1,33 @@
 from rest_framework import serializers
-from users.models import Profile, LANGUAGE_CHOICES, STYLE_CHOICES
-from django.contrib.auth.models import User
+from users.models import Profile, Appointment
+from django.contrib.auth.models import User ,Group
 
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id','name',)
 
 class UsersSerializer(serializers.ModelSerializer):   #  used to get user profile
-    # user = serializers.CharField(source='user.username', read_only=True)
+    groups = GroupSerializer(many=True, read_only=True)
     id = serializers.IntegerField(read_only=True)
     class Meta:
         model = User
-        fields = ('id','username','first_name', 'last_name','email','is_active')
+        fields = ('id','username','first_name', 'last_name','email','is_active','groups')
         datatables_always_serialize = ('id',)
+
+
+class ProfileSerializer(serializers.ModelSerializer):   #  used to get user profile
+    groups = UsersSerializer()
+    user = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
+
+    is_active=serializers.CharField(source='user.is_active', read_only=True)
+    class Meta:
+        model = Profile
+        fields = ('groups','user','first_name','email', 'is_active', 'gender', 'designation', 'qualification', 'experience', 'primary_hospital', 'secondary_hospital', 'specialty', 'mobile_no', 'timing', 'avatar',
+        'martial_status', 'weight', 'height', 'blood_type', 'notes', 'created_date', 'modified_date')
 
 class DoctorsSerializer(serializers.ModelSerializer):   #  used to get user profile
     user = serializers.CharField(source='user.username', read_only=True)
@@ -34,6 +51,14 @@ class StudentSerializer(serializers.ModelSerializer):   #  used to get user prof
     class Meta:
         model = Profile
         fields = ('user_id','user','title','email', 'is_active', 'first_name','last_name', 'gender', 'mobile_no', 'avatar', 'martial_status', 'weight', 'height', 'blood_type', 'notes', 'created_date', 'modified_date')
+
+class AppointmentsSerializer(serializers.ModelSerializer):   #  used to get user Appointments
+    student = serializers.CharField(source='student.username', read_only=True)
+    doctor  = serializers.CharField(source='doctor.username', read_only=True)
+
+    class Meta:
+        model = Appointment
+        fields = ('id','student','doctor','datetime','disease', 'notes', 'status','created_date', 'modified_date')
 
 
 

@@ -4,17 +4,14 @@ from pygments.styles import get_all_styles
 from django.contrib.auth.models import User
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
 
-
-LEXERS = [item for item in get_all_lexers() if item[1]]
-LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
-STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 	title = models.CharField(max_length=100, blank=True, null=True)
+	first_name = models.CharField(max_length=100, blank=True, null=True)
+	last_name = models.CharField(max_length=100, blank=True, null=True)
 	gender = models.CharField(max_length=15, blank=True, null=True)
 	designation =  models.CharField(max_length=250, blank=True, null=True)
 	qualification = models.CharField(max_length=250, blank=True, null=True)
@@ -28,6 +25,8 @@ class Profile(models.Model):
 	martial_status = models.CharField(max_length=250, blank=True, null=True)
 	weight = models.CharField(max_length=250, blank=True, null=True)
 	height = models.CharField(max_length=250, blank=True, null=True)
+	diseases  = models.CharField(max_length=250, blank=True, null=True)
+	allergies = models.CharField(max_length=250, blank=True, null=True)
 	blood_type = models.CharField(max_length=250, blank=True, null=True)
 	notes = models.TextField(blank=True, null=True)
 	created_date = models.DateTimeField(auto_now_add=True)
@@ -36,10 +35,8 @@ class Profile(models.Model):
 	class Meta:
 	    ordering = ('created_date',)
 
-	#def save(self, *args, **kwargs):
-	#    title = get_lexer_by_name(self.title)
-	#    gender = 'table' if self.gender else False
-	#    super(Profile, self).save(*args, **kwargs)
+	def __str__(self): # converting obj
+                return f'{self.user.username} Profile'
 
 
 class Appointment(models.Model):
@@ -51,6 +48,9 @@ class Appointment(models.Model):
 	status = models.BooleanField(default=True)
 	created_date = models.DateTimeField(auto_now_add=True)
 	modified_date = models.DateTimeField(auto_now=True)
+	def __str__(self): # converting obj
+	    return f'{self.student.username} appointment with {self.doctor.username}'
+
 
 class Prescription(models.Model):
 	appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)  

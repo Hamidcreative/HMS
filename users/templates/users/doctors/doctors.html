@@ -69,7 +69,9 @@
         var table = $('#doctors').DataTable({
             "serverSide": true,
             "responsive": true,
-            "ajax": "/doctors/?format=datatables",
+            "ajax":{
+                url:"api/doctors?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+            },
             "columns": [
                 {"data": "user_id", "searchable": false},
                 {"data": "user"},
