@@ -62,7 +62,7 @@
             },
             "columns": [
                 {"data": "id", "searchable": false},
-                {"data": "name"},
+                {"data": "name" ,'hospitalname':'name', "searchable": false},
                 {"data": "detail"},
                 {
                     data: "status",
@@ -87,8 +87,11 @@
                 },
 
             ],
+
         });
-            $(document).on('click','.tabledit-delete-button',function(e){
+
+
+        $(document).on('click','.tabledit-delete-button',function(e){
                 e.preventDefault();
                 var url ='';
                 url = $(this).attr("href");
@@ -98,6 +101,7 @@
                     headers: { 'Authorization': "Token {{request|getToken}}",'Content-Type': 'application/json'},
                     success:function(data){
                             table.draw(false);
+                        $.toaster({ priority : 'success', title : 'Status', message : 'Hospital Deleted Successfully!'});
                     }
                 });
             })
@@ -114,7 +118,8 @@
                     headers: { 'Authorization': "Token {{request|getToken}}",'Content-Type': 'application/json'},
                     data:JSON.stringify({ "status": status }),
                     success:function(data){
-                            table.draw(false);
+                        table.draw(false);
+                        $.toaster({ priority : 'success', title : 'Status', message : 'Hospital Status Updated!'});
                     }
                 });
             })
