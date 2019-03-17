@@ -18,15 +18,9 @@ class UsersSerializer(serializers.ModelSerializer):   #  used to get user profil
 
 
 class ProfileSerializer(serializers.ModelSerializer):   #  used to get user profile
-    groups = UsersSerializer()
-    user = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.CharField(source='user.email', read_only=True)
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-
-    is_active=serializers.CharField(source='user.is_active', read_only=True)
     class Meta:
         model = Profile
-        fields = ('groups','user','first_name','email', 'is_active', 'gender', 'designation', 'qualification', 'experience', 'primary_hospital', 'secondary_hospital', 'specialty', 'mobile_no', 'timing', 'avatar',
+        fields = ('user','gender', 'designation', 'qualification', 'experience', 'primary_hospital', 'secondary_hospital', 'specialty', 'mobile_no', 'timing', 'avatar',
         'martial_status', 'weight', 'height', 'blood_type', 'notes', 'created_date', 'modified_date')
 
 class DoctorsSerializer(serializers.ModelSerializer):   #  used to get user profile

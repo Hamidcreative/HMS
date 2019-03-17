@@ -139,7 +139,7 @@
             "responsive": true,
             "pageLength":5,
             "ajax":{
-              url:"api/users?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+              url:"api/users?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
 
@@ -168,7 +168,7 @@
             "responsive": true,
             "pageLength":5,
             "ajax":{
-                url:"api/hospitals?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+                url:"api/hospitals?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
                 {"data": "name"},
@@ -199,7 +199,7 @@
             "responsive": true,
             "pageLength":5,
             "ajax":{
-                url:"api/appointments?format=datatables", headers: { 'Authorization': 'Token {{token}}' },
+                url:"api/appointments?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
 
