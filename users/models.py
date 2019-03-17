@@ -10,8 +10,8 @@ from pygments.formatters.html import HtmlFormatter
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 	title = models.CharField(max_length=100, blank=True, null=True)
-	first_name = models.CharField(max_length=100, blank=True, null=True)
-	last_name = models.CharField(max_length=100, blank=True, null=True)
+	# first_name = models.CharField(max_length=100, blank=True, null=True)
+	# last_name = models.CharField(max_length=100, blank=True, null=True)
 	gender = models.CharField(max_length=15, blank=True, null=True)
 	designation =  models.CharField(max_length=250, blank=True, null=True)
 	qualification = models.CharField(max_length=250, blank=True, null=True)

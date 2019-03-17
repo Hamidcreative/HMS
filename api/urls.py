@@ -9,6 +9,26 @@ from django.conf.urls import url
 
 router = DefaultRouter()
 
+u_list = users_view.UserViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+user_detail = users_view.UserViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+profile_list = users_view.ProfileViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+profile_detail = users_view.ProfileViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 hospitals_list = hospital_view.HospitalsViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -25,16 +45,6 @@ student_list = users_view.StudentViewSet.as_view({
     'post': 'create'
 })
 student_detail = users_view.StudentViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
-u_list = users_view.UserViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-user_detail = users_view.UserViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
     'patch': 'partial_update',
@@ -72,6 +82,8 @@ urlpatterns = format_suffix_patterns([
     path('doctors/<pk>/', doctor_detail),
     path('users', u_list, name='users'),
     path('users/<pk>/', user_detail),
+    path('profiles', profile_list, name='profiles'),
+    path('profiles/<pk>/', profile_detail),
     path('appointments', appointments_list, name='appointments'),
     path('appointments/<pk>/', appointments_detail),
 ])

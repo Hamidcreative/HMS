@@ -17,16 +17,16 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import filters
 from datetime import date
-
-from .forms import Doctorsform, UserCreationform,Studentform,Adminform
+from .forms import *
 from default.utils import *
 from default.templatetags.custom_tags import *
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
-    filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('id')
+    filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
+    ordering_fields = ('id','username', 'email', 'first_name', 'last_name', 'groups')
+    search_fields = ('username', 'email', 'first_name', 'last_name', 'groups__name')
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -40,52 +40,87 @@ class UserViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    #def update(self, request, pk=None):
-    #    instance = self.queryset.get(pk=pk)
-    #    serializer = self.serializer_class(instance, data=request.data)
-    #    serializer.is_valid(raise_exception=True)
-    #    serializer.save()
-    #    post_data = request.data['groups']
-    #    old_groups = instance.groups.exclude(id=pk)
-    #    if old_groups:
-    #        instance.groups.remove(*list(old_groups))
-    #    instance.groups.add(post_data)
-    #    #if not instance.groups.filter(id=pk):
-    #    #    instance.groups.add(post_data)
-    #
-    #    headers = self.get_success_headers(serializer.data)
-    #    return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('user_id')
 
 def users_listing(request):
-    tokens = request.session.get('token')
-    return render(request,'users/users.html',{'token': tokens,})
+    return render(request,'users/user//listing.html')
 
 def add_user(request):
     form = UserCreationform()
-    context = { 'form' : form, 'app':'users','type':'POST','app_url':'users','redirect':'users-list'}
-    return render(request, 'users/add_user.html',context)
+    context = { 'form' : form, 
+                'app':'users',
+                'type':'POST',
+                'app_url':'users',
+                'redirect':'users-list'
+            }
+    return render(request, 'users/user/form.html',context)
 
 def edit_user(request, id):
-    instance = get_object_or_404(User, id=id)
-    form = UserCreationform(request.POST or None, instance=instance)
-    group = instance.groups.values_list('name', flat=True).first()
-    print(group)
-    group_form  = ''
-    if group == 'Doctor':
-         group_form = Doctorsform(request.POST or None, instance=instance.profile)
-    elif group == 'Student':
-         group_form = Studentform(request.POST or None, instance=instance.profile)
-    elif group == 'Pharmacist':
-         group_form = Adminform(request.POST or None, instance=instance.profile)
-    elif group == 'Hospital Admin':
-         group_form = Adminform(request.POST or None, instance=instance.profile)
-    elif group == 'Admin':
-         group_form = Adminform(request.POST or None, instance=instance.profile)
-    else:
-         group_form = Adminform(request.POST or None, instance=instance.profile)
+    user = get_object_or_404(User, id=id)
+    form = UserCreationform(request.POST or None, instance=user)
+    group = user.groups.values_list('name', flat=True).first()
+    profile_form  = ''
+    try:
+        profile = user.profile
+    except:
+        profile = None
 
-    context = {'form' : form,'group_form' : group_form, 'user':instance,'user_profile':instance.profile, 'app':'users','type':'PUT','app_url':'users' ,'group':group}
-    return render(request,'users/add_user.html',context)
+    context = {
+            'form' : form,
+            'user':user, 
+            'app':'users',
+            'type':'PUT',
+            'app_url':'users',
+            'group':group,
+            'profile':profile
+        }
+   
+    if group == 'Doctor':
+         context['profile_form'] = Doctorsform(request.POST or None, instance=profile, user=user)
+    elif group == 'Student':
+         context['profile_form']  = Studentform(request.POST or None, instance=profile, user=user)
+
+    return render(request,'users/user/form.html',context)
+
+class AppointmentsViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentsSerializer
+    filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
+    ordering_fields = ('id','student__username', 'doctor__username', 'datetime', 'disease', 'notes', 'status')
+    search_fields = ('id','student__username', 'doctor__username', 'datetime', 'disease', 'notes', 'status')
+
+    def perform_create(self, serializer):
+       serializer.save(user=self.request.user)
+
+def appointments_listing(request):
+    return render(request,'users/appointments/listing.html')
+
+def add_appointment(request):
+    form = Appointmentform()
+    context = { 'form' : form, 
+                'app':'users',
+                'type':'POST',
+                'app_url':'appointments',
+                'redirect':'appointments-list'
+                }
+    return render(request, 'users/appointments/form.html',context)
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('users', request=request, format=format),
+        'students': reverse('students', request=request, format=format),
+        'doctors': reverse('doctors', request=request, format=format),
+        'hospitals': reverse('hospitals', request=request, format=format),
+    })
+
+def users_dashboard(request):
+    return render(request,'users/dashboard.html')
+
 
 class DoctorsViewSet(viewsets.ModelViewSet):
 
@@ -120,31 +155,3 @@ class StudentViewSet(viewsets.ModelViewSet):
 def student_listing(request):
     tokens = request.session.get('token')
     return render(request,'users/students/studemts.html',{'token': tokens,})
-
-class  AppointmentsViewSet(viewsets.ModelViewSet):
-
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentsSerializer
-
-    def perform_create(self, serializer):
-       serializer.save(user=self.request.user)
-
-def appointments_listing(request):
-    tokens = request.session.get('token')
-    return render(request,'users/appointments/appointments.html',{'token': tokens,})
-
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('users', request=request, format=format),
-        'students': reverse('students', request=request, format=format),
-        'doctors': reverse('doctors', request=request, format=format),
-        'hospitals': reverse('hospitals', request=request, format=format),
-    })
-
-def users_dashboard(request):
-    tokens = request.session.get('token')
-    users = request.session.get('group')
-    return render(request,'users/dashboard.html',{'token': tokens, 'username':users})
-
-

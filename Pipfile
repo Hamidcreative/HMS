@@ -12,6 +12,7 @@ pygments = "*"
 django = "==2.1.7"
 djangorestframework-datatables = "*"
 django-crispy-forms = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"

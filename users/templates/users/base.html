@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Quantum Able Bootstrap 4 Admin Dashboard Template by Phoenixcoded</title>
+    <title>Backend Portal</title>
     <!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,8 +34,8 @@
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
 
-    <!-- Chartlist chart css -->
-    <link rel="stylesheet" href="{% static 'bower_components/chartist/dist/chartist.css' %}" type="text/css" media="all">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
     <!-- Weather css -->
     <link href="{% static 'assets/css/svg-weather.css' %}" rel="stylesheet">
@@ -61,7 +61,8 @@
     <!-- Navbar-->
     <header class="main-header-top hidden-print">
         <!--<a href="{%  url 'users_dashboard' %}" class="logo"><img class="img-fluid able-logo" src="{% static 'assets/images/logo.png' %}" alt="Hospital"></a>-->
-        <a href="{%  url 'users_dashboard' %}" class="logo"> {{username}} Portal </a>
+        <a href="{%  url 'users_dashboard' %}" class="logo"> 
+            {{request|getUserGroup}} Portal </a>
         <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->
             <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
@@ -130,8 +131,8 @@
                     <!-- User Menu-->
                     <li class="dropdown">
                         <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
-                            <span><img class="img-circle " src="{% static 'assets/images/avatar-1.png' %}" style="width:40px;" alt="User Image"></span>
-                            <span>Super <b>Admin</b> <i class=" icofont icofont-simple-down"></i></span>
+                            <!-- <span><img class="img-circle " src="{% static 'assets/images/avatar-1.png' %}" style="width:40px;" alt="User Image"></span> -->
+                            <span>{{ request|getUser:'first_name' }} <i class=" icofont icofont-simple-down"></i></span>
 
                         </a>
                         <ul class="dropdown-menu settings-menu">
@@ -207,7 +208,6 @@
         <section class="sidebar" id="sidebar-scroll">
             <!-- Sidebar Menu-->
             <ul class="sidebar-menu">
-                <li class="nav-level">   </li>
                 <li class="treeview active">
                     <a class="waves-effect waves-dark" href="{%  url 'users_dashboard' %}">
                         <i class="ti-dashboard text-purple"></i><span> Dashboard</span>
@@ -233,7 +233,6 @@
                     <ul class="treeview-menu">
                         <li><a class="waves-effect waves-dark" href="{% url 'hospitals-listing' %}" target=""><i class="icon-arrow-right"></i><span> Hospitals</span></a></li>
                         <li><a class="waves-effect waves-dark" href="{% url 'add_hospitals' %}" target=""><i class="icon-arrow-right"></i><span> Add Hospital</span></a></li>
-                        <li><a class="waves-effect waves-dark" href="#" target=""><i class="icon-arrow-right"></i><span> Add Doctors Info</span></a></li>
                     </ul>
                 </li>
 
@@ -243,6 +242,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a class="waves-effect waves-dark" href="{% url 'appointments_listing' %}" target=""><i class="icon-arrow-right"></i><span> Appointments</span></a></li>
+                        <li><a class="waves-effect waves-dark" href="{% url 'add_appointment' %}" target=""><i class="icon-arrow-right"></i><span> Add Appointment</span></a></li>
                     </ul>
                 </li>
 
@@ -496,51 +496,6 @@
 </div>
 
 
-<!-- Warning Section Starts -->
-<!-- Older IE warning message -->
-<!--[if lt IE 9]>
-<div class="ie-warning">
-    <h1>Warning!!</h1>
-    <p>You are using an outdated version of Internet Explorer, please upgrade <br/>to any of the following web browsers to access this website.</p>
-    <div class="iew-container">
-        <ul class="iew-download">
-            <li>
-                <a href="http://www.google.com/chrome/">
-                    <img src="{% static 'assets/images/browser/chrome.png' %}" alt="Chrome">
-                    <div>Chrome</div>
-                </a>
-            </li>
-            <li>
-                <a href="https://www.mozilla.org/en-US/firefox/new/">
-                    <img src="{% static 'assets/images/browser/firefox.png' %}" alt="Firefox">
-                    <div>Firefox</div>
-                </a>
-            </li>
-            <li>
-                <a href="http://www.opera.com">
-                    <img src="{% static 'assets/images/browser/opera.png' %}" alt="Opera">
-                    <div>Opera</div>
-                </a>
-            </li>
-            <li>
-                <a href="https://www.apple.com/safari/">
-                    <img src="{% static 'assets/images/browser/safari.png' %}" alt="Safari">
-                    <div>Safari</div>
-                </a>
-            </li>
-            <li>
-                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                    <img src="{% static 'assets/images/browser/ie.png' %}" alt="">
-                    <div>IE (9 & above)</div>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <p>Sorry for the inconvenience!</p>
-</div>
-<![endif]-->
-<!-- Warning Section Ends -->
-
 
 <script src="{% static 'bower_components/Jquery/dist/jquery.min.js' %}"></script>
 
@@ -574,28 +529,12 @@
 <!-- Sparkline charts -->
 <script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
 
-<!-- Counter js  -->
-<script src="{% static 'bower_components/waypoints/lib/jquery.waypoints.min.js' %}"></script>
-<script src="{% static 'assets/plugins/countdown/js/jquery.counterup.js' %}"></script>
-
-<!-- Echart js -->
-<script src="{% static 'assets/plugins/charts/echarts/js/echarts-all.js' %}"></script>
-
-
-<script src="{% static 'assets/js/highcharts.js' %}"></script>
-<script src="{% static 'assets/js/exporting.js' %}"></script>
-<script src="{% static 'assets/js/highcharts-3d.js' %}"></script>
-
-
-
 <!-- custom js -->
 <script type="text/javascript" src="{% static 'assets/js/main.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'assets/pages/dashboard.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/pages/elements.js' %}"></script>
 <script src="{% static 'assets/js/menu.min.js' %}"></script>
 <script src="{% static 'custom.js' %}"></script>
 {% block footer %}
-
 
 {% endblock %}
 

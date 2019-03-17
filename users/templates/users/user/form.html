@@ -1,6 +1,5 @@
 {% extends "users/base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block content %}
 
 <div class="container-fluid">
@@ -14,7 +13,7 @@
                     <li class="breadcrumb-item"><a href="#!"> {{ app|capfirst }} </a>
                     </li>
                     <li class="breadcrumb-item"><a href="#">
-                        {% if user.id  %} Edit  {% else %} Add  {% endif %}
+                        {% if user.id  %} Edit  {% else %} Add  {% endif %} 
                     </a>
                     </li>
                 </ol>
@@ -37,38 +36,9 @@
                       {% endif %}
                     </ul>
                     <div class="tab-content">
-                        <div id="basic_info" class="tab-pane container active">
-                            <div class="card-block">
-                                <form method="POST" class="form" action="{% url app %}">
-                                    <fieldset class="form-group">
-                                        {{ form|crispy }}
-
-                                    </fieldset>
-                                    <div class="form-group">
-                                        {% if profile_form %}
-                                        <button class="btn btn-info next" type="submit">Next </button>
-                                        {% else %}
-                                        <button class="btn btn-info save" type="submit">Save </button>
-                                        {% endif %}
-                                        <p class="text-danger" id="error"> </p>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        {% include "users/user/add_user.html" %}
                         {% if profile_form %}
-                        <div id="user_profile" class="tab-pane container fade">
-                            <div class="card-block">
-                                <form method="POST" class="form" action="{% url app %}">
-                                    <fieldset class="form-group">
-                                        {{ profile_form|crispy }}
-                                    </fieldset>
-                                    <div class="form-group">
-                                        <button class="btn btn-info save" type="submit">Save </button>
-                                        <p class="text-danger" id="error"> </p>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                            {% include "users/user/add_profile.html" %}
                         {% endif %}
                     </div>
                 </div>
@@ -89,33 +59,54 @@
             }
             return true;
         }
-        {% if user.id %}
-            url = "{% url app_url %}"+'/'+"{{user.id}}"+'/';
-        {% else %}
-            url = "{% url app_url %}";
-        {% endif %}
         
-        $(document).on('click','.save',function(e){
-            e.preventDefault();
+        function saveFormData(url, btnEl, method_type){
            // if( Validate() === true ) {
-            var array = $('form.form').serializeArray();
+            var array = btnEl.parents('form').serializeArray();
             var from_data = {};
             jQuery.each(array, function () {
-                    from_data[this.name] = this.value || '';
+                from_data[this.name] = this.value || '';
             });
             console.log(from_data);
-           $.ajax({
-               type: '{{type}}',
+            console.log(method_type);
+            $.ajax({
+               type: method_type,
                url: url,
                headers: {'Authorization': "Token {{request|getToken}}", 'Content-Type': 'application/json'},
                data: JSON.stringify(from_data),
                success: function (data) {
                    // $.toaster({ priority : 'success', title : 'Status', message : 'User Status Updated!'});
+                if(btnEl.hasClass('next'))
+                    $('.nav.nav-pills a[href="#user_profile"]').tab('show');
+                else
                    window.location.href = "{% url 'users_listing' %}";
 
+                }
+            });
+        }
 
-               }
-           });
+
+        jQuery(document).on('click','.save-basic',function(e){
+            e.preventDefault();
+            {% if user.id %}
+                var url = "{% url app_url %}"+'/'+"{{user.id}}"+'/';
+            {% else %}
+                var url = "{% url app_url %}";
+            {% endif %}
+            var method_type = "{{type}}";
+            saveFormData(url, $(this), method_type);
+        })
+
+        jQuery(document).on('click','.save-profile',function(e){
+            e.preventDefault();
+            {% if profile is not None %}
+                var profile_url = "{% url 'profiles' %}"+'/'+"{{user.id}}"+'/';
+                var method_type = 'PUT';
+            {% else %}
+                var method_type = 'POST';
+                var profile_url = "{% url 'profiles' %}";
+            {% endif %}
+            saveFormData(profile_url, $(this), method_type);
         })
     });
 </script>
