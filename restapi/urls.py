@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('api/sampleapi', sample_api),
 
-    #path('login/',auth_views.LoginView.as_view(template_name='users/login.html',extra_context={'next': 'users_dashboard',},), name='login'), # class base view
+    # path('logout/',auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('logout/',auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
 
 ]

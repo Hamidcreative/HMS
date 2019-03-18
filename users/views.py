@@ -57,6 +57,8 @@ def add_user(request):
                 'app_url':'users',
                 'redirect':'users-list'
             }
+   
+
     return render(request, 'users/user/form.html',context)
 
 def edit_user(request, id):
@@ -78,7 +80,6 @@ def edit_user(request, id):
             'group':group,
             'profile':profile
         }
-   
     if group == 'Doctor':
          context['profile_form'] = Doctorsform(request.POST or None, instance=profile, user=user)
     elif group == 'Student':
