@@ -36,9 +36,11 @@ class UserCreationform(UserCreationForm):
 class Doctorsform(forms.ModelForm):
     # user_id = forms.ModelChoiceField(queryset=User.objects.all())
     def __init__(self, *args, **kwargs):
+
+        user = kwargs.pop('user')
         super(Doctorsform, self).__init__(*args, **kwargs)
-        if kwargs['instance'] is not None:
-            self.fields['user'] = forms.ModelChoiceField(queryset=User.objects.filter(id=kwargs['instance'].user_id), empty_label=None)
+        if user is not None:
+            self.fields['user'] = forms.ModelChoiceField(queryset=User.objects.filter(id=user.id), empty_label=None)
         
         self.fields['timing'].widget.attrs['rows'] = 3
         self.fields['notes'].widget.attrs['rows'] = 3

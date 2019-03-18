@@ -70,7 +70,6 @@ def edit_user(request, id):
         profile = user.profile
     except:
         profile = None
-
     context = {
             'form' : form,
             'user':user, 

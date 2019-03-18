@@ -13,7 +13,7 @@ class Hospital(models.Model):
 		return '{}'.format(self.name)
 		
 	class Meta:
-		ordering = ['-created_date']
+		ordering = ['id']
 
 class MedicineType(models.Model):
 	name = models.CharField(max_length=250)
