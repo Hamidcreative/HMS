@@ -28,5 +28,13 @@ def getUserGroup(request):
 		return ''
 
 @register.filter
-def isDr(request):
-	 return checkUserGroup(request, 'Doctor')
+def isDoctor(request):
+	if getUserGroup(request) == 'Doctor':
+		return True
+	return False
+
+@register.filter
+def isPharmacist(request):
+	if getUserGroup(request) == 'Pharmacist':
+		return True
+	return False

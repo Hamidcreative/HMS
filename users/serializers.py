@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from users.models import Profile, Appointment
 from django.contrib.auth.models import User ,Group
+from django.contrib.auth.hashers import make_password
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -11,6 +12,27 @@ class GroupSerializer(serializers.ModelSerializer):
 class UsersSerializer(serializers.ModelSerializer):   #  used to get user profile
     groups = GroupSerializer(many=True, read_only=True)
     id = serializers.IntegerField(read_only=True)
+
+    def update(self, instance, validated_data):
+        request = self.context.get("request")
+        # update password
+        password = request.data['password1']
+        user = super(UsersSerializer, self).update(instance, validated_data)
+        if password: 
+            user.set_password(password)
+        user.save()
+
+        # update user group
+        group = request.data['groups']
+        # check if group not exist already
+        if not user.groups.filter(id=group):
+            user.groups.add(group)
+
+        old_groups = user.groups.exclude(id=group)
+        if old_groups:
+            user.groups.remove(*list(old_groups))
+        return user
+
     class Meta:
         model = User
         fields = ('id','username','first_name', 'last_name','email','is_active','groups')

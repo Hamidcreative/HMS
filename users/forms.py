@@ -9,7 +9,10 @@ class UserCreationform(UserCreationForm):
     email = forms.EmailField()
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=True, initial=0)
     def __init__(self, *args, **kwargs):
+        super(UserCreationform, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
         self.helper.layout = Layout(
             Row(
                 Field('first_name', wrapper_class='col-sm-6'),
@@ -27,7 +30,6 @@ class UserCreationform(UserCreationForm):
                 Field('groups', wrapper_class='col-sm-6'),
             ),
         )
-        super(UserCreationform, self).__init__(*args, **kwargs)
 
     class Meta:
         model  = User

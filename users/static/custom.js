@@ -18,3 +18,24 @@ function searchOrderFn(table){
         table.ajax.url(ajax_url+'&ordering='+column_name);
     })
 }
+
+
+function checkRequiredFields(formEl){
+    $('#error').empty();
+    $(formEl).find('label').css('color','#2b3d51cc');
+    var error = false;
+    formEl.find('input[required], textarea[required], select[required]').each(function(i, el){
+        if($(el).val() == ''){
+            var el_name = $(el).attr('name');
+            var label = $('label[for="id_'+el_name+'"]').css('color','red');
+            error = true;
+        }
+    })
+    if(error){
+        $('#error').html('Some fields are required');
+        return false;
+    }
+
+    return true;
+
+}

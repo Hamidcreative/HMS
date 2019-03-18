@@ -35,6 +35,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = self.perform_create(serializer)
+        # user.password = make_password(request.data['password'])
+        user.set_password(request.data['password1'])
+        user.save()
         post_data = request.data['groups']
         user.groups.add(post_data)
         headers = self.get_success_headers(serializer.data)
@@ -58,7 +61,6 @@ def add_user(request):
                 'redirect':'users-list'
             }
    
-
     return render(request, 'users/user/form.html',context)
 
 def edit_user(request, id):
@@ -72,7 +74,7 @@ def edit_user(request, id):
         profile = None
     context = {
             'form' : form,
-            'user':user, 
+            'user_obj':user, 
             'app':'users',
             'type':'PUT',
             'app_url':'users',

@@ -13,7 +13,7 @@
                     <li class="breadcrumb-item"><a href="#!"> {{ app|capfirst }} </a>
                     </li>
                     <li class="breadcrumb-item"><a href="#">
-                        {% if user.id  %} Edit  {% else %} Add  {% endif %}
+                        {% if user_obj  %} Edit  {% else %} Add  {% endif %}
                     </a>
                     </li>
                 </ol>
@@ -24,7 +24,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <legend class="border-bottom mb-4">{% if user.id  %} Edit  {{ app|capfirst }}  {% else %} Add {{ app|capfirst }} {% endif %}</legend>
+                    <legend class="border-bottom mb-4">{% if user_obj  %} Edit  {{ app|capfirst }}  {% else %} Add {{ app|capfirst }} {% endif %}</legend>
                     <ul class="nav nav-pills">
                       <li class="nav-item">
                         <a class="nav-link active" data-toggle="pill" href="#basic_info">Basic Info</a>
@@ -57,11 +57,16 @@
                 $("#error").text("Passwords do not match.");// we will update validation for rest frame work latter
                 return false;
             }
+
             return true;
         }
         
         function saveFormData(url, btnEl, method_type){
            // if( Validate() === true ) {
+
+            // check for required fields
+            if(!checkRequiredFields(btnEl.parents('form'))) return false;
+
             var array = btnEl.parents('form').serializeArray();
             var from_data = {};
             jQuery.each(array, function () {
@@ -88,8 +93,8 @@
 
         jQuery(document).on('click','.save-basic',function(e){
             e.preventDefault();
-            {% if user.id %}
-                var url = "{% url app_url %}"+'/'+"{{user.id}}"+'/';
+            {% if user_obj %}
+                var url = "{% url app_url %}"+'/'+"{{user_obj.id}}"+'/';
             {% else %}
                 var url = "{% url app_url %}";
             {% endif %}
@@ -100,7 +105,7 @@
         jQuery(document).on('click','.save-profile',function(e){
             e.preventDefault();
             {% if profile is not None %}
-                var profile_url = "{% url 'profiles' %}"+'/'+"{{user.id}}"+'/';
+                var profile_url = "{% url 'profiles' %}"+'/'+"{{user_obj.id}}"+'/';
                 var method_type = 'PUT';
             {% else %}
                 var method_type = 'POST';

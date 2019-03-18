@@ -64,7 +64,7 @@
 
                     <div class="table-responsive">
                         <h6 class="p-20">Users</h6>
-                        <table cellspacing="0" id="students"  class="datatable table table-small-font table-bordered table-striped">
+                        <table cellspacing="0" id="users"  class="datatable table table-small-font table-bordered table-striped">
                             <thead>
                             <tr>
 
@@ -133,13 +133,13 @@
 {% csrf_token %}
 <script>
     jQuery(document).ready(function($) {
-        var table = $('#students').DataTable({
+        var table = $('#users').DataTable({
             "dom": '<"top">t<"bottom"><"clear">',
             "serverSide": true,
             "responsive": true,
             "pageLength":5,
             "ajax":{
-              url:"api/users?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
+              url:"api/users?format=datatables&ordering=-id", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
 
@@ -168,7 +168,7 @@
             "responsive": true,
             "pageLength":5,
             "ajax":{
-                url:"api/hospitals?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
+                url:"api/hospitals?format=datatables&ordering=-id", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
                 {"data": "name"},
@@ -199,7 +199,7 @@
             "responsive": true,
             "pageLength":5,
             "ajax":{
-                url:"api/appointments?format=datatables", headers: { 'Authorization': 'Token {{request|getToken}}' },
+                url:"api/appointments?format=datatables&ordering=-id", headers: { 'Authorization': 'Token {{request|getToken}}' },
             },
             "columns": [
 
@@ -217,7 +217,7 @@
         setTimeout(function(){
             $('.total_hospitals').text($('#hospitals').DataTable().page.info().recordsTotal);
             $('.total_doctors').text(5);
-            $('.total_students').text($('#students').DataTable().page.info().recordsTotal);
+            $('.total_students').text($('#users').DataTable().page.info().recordsTotal);
             $('.total_appointments').text($('#appointments').DataTable().page.info().recordsTotal);
         },500);
     });

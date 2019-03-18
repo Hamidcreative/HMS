@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from django.shortcuts import render, redirect
 from django.core import serializers
 import json
+from default.templatetags.custom_tags import getToken
 
 @csrf_exempt
 @api_view(['POST'])
@@ -34,7 +35,8 @@ def login(request):
     # we need to serialize user and token to save in session
     user_obj = serializers.serialize('json', [ user ], ensure_ascii=False)
     token_obj = serializers.serialize('json', [ token ], ensure_ascii=False)
-    user_group = user.groups.first()
+    user_group = user.groups.first() 
+    redirect = None
     if user_group is not None:
         user_group = user_group.name
         if user_group == 'Admin':
@@ -54,10 +56,22 @@ def login(request):
     request.session['group'] = user_group
     # create response data
     data = { 'user_name':user.username, 'first_name':user.first_name,'last_name':user.last_name,'email':user.email, 'type':user_group}
-    return Response({'token': token.key, 'data':data, 'type':'success','redirect':redirect}, status=HTTP_200_OK)
+    return Response({
+        'token': token.key, 
+        'data':data, 
+        'type':'success',
+        'redirect':redirect,
+        }, status=HTTP_200_OK)
 
 def loginPage(request):
     return render(request,'users/login.html',{'next': 'users_dashboard',})
+
+def logout(request):
+    # get token from session and delete
+    token = getToken(request)
+    Token.objects.filter(key=token).delete()
+    request.session.flush()
+    return redirect('/login')
 
 @csrf_exempt
 @api_view(["GET"])

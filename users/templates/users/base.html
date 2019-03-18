@@ -136,12 +136,7 @@
                         </a>
                         <ul class="dropdown-menu settings-menu">
                             <li><a href="#!"><i class="icon-settings"></i> Settings</a></li>
-                            <li><a href="#"><i class="icon-user"></i> Profile</a></li>
-                            <li><a href="#"><i class="icon-envelope-open"></i> My Messages</a></li>
-                            <li class="p-0">
-                                <div class="dropdown-divider m-0"></div>
-                            </li>
-                            <li><a href="#"><i class="icon-lock"></i> Lock Screen</a></li>
+                            <li><a href="/users/{{user.id}}"><i class="icon-user"></i> Profile</a></li>
                             <li><a href="{% url 'logout' %}?next=/login"><i class="icon-logout"></i><span> Logout</span></a></li>
 
 
@@ -203,20 +198,13 @@
         </nav>
     </header>
     <!-- Side-Nav-->
-
-    {% if request|getUserGroup == 'Admin' %}
-        {% include "users/sidebar/super_admin.html" %}
-    {% elif request|getUserGroup == 'Doctor' %}
-        {% include "users/sidebar/doctor.html" %}
-    {% elif request|getUserGroup == 'Hospital Admin' %}
-        {% include "users/sidebar/university.html" %}
-    {% elif request|getUserGroup == 'Pharmacist' %}
-        {% include "users/sidebar/pharmacy.html" %}
-    {% elif request|getUserGroup == 'Student' %}
-        {% include "users/sidebar/student.html" %}
+    {% if request|isDoctor %}
+        {% include "default/sidebar/doctor.html" %}
+    {% elif request|isPharmacist %}
+        {% include "default/sidebar/pharmacy.html" %}
+    {% else %}
+        {% include "default/sidebar/admin.html" %}
     {% endif %}
-
-
     <!-- Sidebar chat start -->
     <div id="sidebar" class="p-fixed header-users showChat">
         <div class="had-container">
