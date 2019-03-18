@@ -46,7 +46,6 @@
             <div class="col-sm-12">
                 <div class="login-card card-block">
                     <form class="login-form" action="api/login"  method="POST">
-                        <input type="hidden" name="next" value="{% url next %}">
                         <div class="text-center">
                             <img src="{% static 'assets/images/logo-black.png' %}">
                         </div>
@@ -99,7 +98,7 @@
 <script src="{% static 'bower_components/Jquery/dist/jquery.min.js' %}"></script>
 <!-- Required Fremwork -->
 <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-
+<script src="{% static 'assets/js/jquery.toaster.js' %}"></script>
 <!-- custom js -->
 <script src="{% static 'custom.js' %}"></script>
 <script>
@@ -110,8 +109,6 @@
         jQuery.each(array, function() {
             from_data[this.name] = this.value || '';
         });
-
-        console.log(from_data);
         $.ajax({
             url:'/api/login',
             type:'POST',
@@ -119,16 +116,16 @@
             beforeSend:function(data){
             },
             success:function(data){
-                // check success response
                 if(data['type'] == 'success'){
-                    window.location.assign('/users-dashboard');
+                    window.location.assign(data['redirect']);
                 } else {
-                    alert(data['message']);
+                    $.toaster({ priority : 'danger', title : 'Status', message : data['message']});
                 }
             },
             error:function(data){
                 response = data['responseJSON'];
-                console.log(response['message'])
+                $.toaster({ priority : 'danger', title : 'Status', message : response['message']});
+
             }
         })
     })

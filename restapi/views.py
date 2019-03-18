@@ -37,15 +37,24 @@ def login(request):
     user_group = user.groups.first()
     if user_group is not None:
         user_group = user_group.name
-    # save user and token in session for website
-    if request.data.get("next") == '/users-dashboard':
-        request.session['user'] = user_obj
-        request.session['token'] = token_obj
-        request.session['group'] = user_group
+        if user_group == 'Admin':
+            redirect = '/users-dashboard'
+        elif user_group == 'Doctor':
+            redirect = '/users/' +str(user.id)+ '/'
+        elif user_group == 'Hospital Admin':
+            redirect ='/users/' +str(user.id)+ '/'
+        elif user_group == 'Pharmacist':
+            redirect = '/users/' +str(user.id)+ '/'
+        elif user_group == 'Student':
+            redirect ='/users/' +str(user.id)+ '/'
 
+    # save user and token in session for website
+    request.session['user'] = user_obj
+    request.session['token'] = token_obj
+    request.session['group'] = user_group
     # create response data
     data = { 'user_name':user.username, 'first_name':user.first_name,'last_name':user.last_name,'email':user.email, 'type':user_group}
-    return Response({'token': token.key, 'data':data, 'type':'success'}, status=HTTP_200_OK)
+    return Response({'token': token.key, 'data':data, 'type':'success','redirect':redirect}, status=HTTP_200_OK)
 
 def loginPage(request):
     return render(request,'users/login.html',{'next': 'users_dashboard',})

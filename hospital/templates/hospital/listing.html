@@ -98,6 +98,7 @@
                     headers: { 'Authorization': "Token {{request|getToken}}",'Content-Type': 'application/json'},
                     success:function(data){
                             table.draw(false);
+                            $.toaster({ priority : 'success', title : 'Status', message : 'Hospital Deleted!'});
                     }
                 });
             })
@@ -115,10 +116,11 @@
                     data:JSON.stringify({ "status": status }),
                     success:function(data){
                             table.draw(false);
+                            $.toaster({ priority : 'success', title : 'Status', message : 'Hospital Status Updated!'});
                     }
                 });
-            })
-        searchOrderFn(table);
+            });
+       searchOrderFn(table);
     });
 </script>
 {% endblock %}
