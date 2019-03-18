@@ -14,42 +14,41 @@ from django.core import serializers
 import json
 
 @csrf_exempt
-@api_view(['GET','POST'])
+@api_view(['POST'])
 @permission_classes((AllowAny,))
 def login(request):
-    if request.method == 'POST':
-        username = request.data.get("username")
-        password = request.data.get("password")
-        if username is None or password is None:
-            return Response({'error': 'Please provide both username and password'},
-                            status=HTTP_400_BAD_REQUEST)
-        user = authenticate(username=username, password=password)
-        if not user:
-            return Response({'error': 'Invalid Credentials'},
-                            status=HTTP_404_NOT_FOUND)
-        token, _ = Token.objects.get_or_create(user=user)
-        if request.data.get("next") == '/users-dashboard':
-            serialized_obj = serializers.serialize('json', [ user, ])
+    username = request.data.get("username")
+    password = request.data.get("password")
 
-            #user = { 'user_name':user.username, 'first_name':user.first_name,'last_name':user.last_name,'email':user.email, 'group':user.groups.values_list('name',flat=True)}
+    # validate data
+    if username is None or password is None:
+        return Response({'message': 'Please provide both username and password','type':'error'},
+                        status=HTTP_400_BAD_REQUEST)
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({'message': 'Invalid Credentials','type':'error'},
+                        status=HTTP_400_BAD_REQUEST)
+    # create token 
+    token, _ = Token.objects.get_or_create(user=user)
 
-            request.session['token'] = token.key
-            request.session['username'] = user.username
-            request.session['first_name'] = user.first_name
-            request.session['last_name'] = user.last_name
-            request.session['email'] = user.email
-            request.session['group'] = user.groups.values_list('name',flat=True)[0]
-            return redirect('users_dashboard')
-        else:
-           serialized_obj = serializers.serialize('json', [ user, ])
-           user = { 'user_name':user.username, 'first_name':user.first_name,'last_name':user.last_name,'email':user.email, 'group':user.groups.values_list('name',flat=True)}
-           #profile = { 'title':user.profile.title, 'gender':user.profile.gender,'last_name':user.last_name,'email':user.email, 'group':user.groups.values_list('name',flat=True)}
-           #profile = {}
-           #user = dict(users.items() | profile.items())
+    # we need to serialize user and token to save in session
+    user_obj = serializers.serialize('json', [ user ], ensure_ascii=False)
+    token_obj = serializers.serialize('json', [ token ], ensure_ascii=False)
+    user_group = user.groups.first()
+    if user_group is not None:
+        user_group = user_group.name
+    # save user and token in session for website
+    if request.data.get("next") == '/users-dashboard':
+        request.session['user'] = user_obj
+        request.session['token'] = token_obj
+        request.session['group'] = user_group
 
-           return Response({'token': token.key, 'user':user},status=HTTP_200_OK)
-    else:
-        return render(request,'users/login.html',{'next': 'users_dashboard',})
+    # create response data
+    data = { 'user_name':user.username, 'first_name':user.first_name,'last_name':user.last_name,'email':user.email, 'type':user_group}
+    return Response({'token': token.key, 'data':data, 'type':'success'}, status=HTTP_200_OK)
+
+def loginPage(request):
+    return render(request,'users/login.html',{'next': 'users_dashboard',})
 
 @csrf_exempt
 @api_view(["GET"])

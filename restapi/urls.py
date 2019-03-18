@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views # for login logout
-from .views import login, sample_api
+from .views import login, sample_api, loginPage
 
 
 
@@ -26,8 +26,8 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('hospital.urls')),
     path('api/', include('api.urls')),
-    path('api/login', login,name='api_login'),
-    path('login', login,name='login'),
+    path('api/login', login, name='api_login'),
+    path('login', loginPage),
 
     path('api/sampleapi', sample_api),
 

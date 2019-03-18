@@ -14,5 +14,6 @@ urlpatterns = format_suffix_patterns([
     #path('doctors/<int:id>/', views.edit_doctor, name='edit_doctor'),
     path('student-list', views.student_listing, name='student_listing'),
     path('users-dashboard', views.users_dashboard, name='users_dashboard'),
+    path('appointment/add', views.add_appointment, name='add_appointment'),
 ])
 

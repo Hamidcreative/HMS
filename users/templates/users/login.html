@@ -6,13 +6,6 @@
 
 <head>
     <title>Quantum Able Bootstrap 4 Admin Dashboard Template by Phoenixcoded</title>
-    <!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -29,19 +22,11 @@
     <!-- iconfont -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/icon/icofont/css/icofont.css' %}">
 
-
     <!-- simple line icon -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/icon/simple-line-icons/css/simple-line-icons.css' %}">
 
     <!-- Required Fremwork -->
     <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
-
-    <!-- Chartlist chart css -->
-    <link rel="stylesheet" href="{% static 'bower_components/chartist/dist/chartist.css' %}" type="text/css" media="all">
-
-    <!-- Weather css -->
-    <link href="{% static 'assets/css/svg-weather.css' %}" rel="stylesheet">
-
 
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/main.css' %}">
@@ -60,8 +45,7 @@
 
             <div class="col-sm-12">
                 <div class="login-card card-block">
-                    <form class="" action="api/login"  method="POST">
-                        {% csrf_token %}
+                    <form class="login-form" action="api/login"  method="POST">
                         <input type="hidden" name="next" value="{% url next %}">
                         <div class="text-center">
                             <img src="{% static 'assets/images/logo-black.png' %}">
@@ -89,7 +73,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-10 offset-xs-1">
-                              <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">LOGIN</button>
+                              <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20 login-btn">LOGIN</button>
                             </div>
                         </div>
                         <!-- <div class="card-footer"> -->
@@ -112,54 +96,44 @@
 </section>
 
 
-
-
-
-
-
 <script src="{% static 'bower_components/Jquery/dist/jquery.min.js' %}"></script>
-
-<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-<script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="{% static 'bower_components/tether/dist/js/tether.min.js' %}"></script>
-
 <!-- Required Fremwork -->
 <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
-<!-- Scrollbar JS-->
-<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
-<script src="{% static 'bower_components/jquery.nicescroll/dist/jquery.nicescroll.min.js' %}"></script>
-
-<!--classic JS-->
-<script src="{% static 'bower_components/classie/classie.js' %}"></script>
-
-<!-- notification -->
-<script src="{% static 'assets/plugins/notification/js/bootstrap-growl.min.js' %}"></script>
-
-<!-- Sparkline charts -->
-<script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
-
-<!-- Counter js  -->
-<script src="{% static 'bower_components/waypoints/lib/jquery.waypoints.min.js' %}"></script>
-<script src="{% static 'assets/plugins/countdown/js/jquery.counterup.js' %}"></script>
-
-<!-- Echart js -->
-<script src="{% static 'assets/plugins/charts/echarts/js/echarts-all.js' %}"></script>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/highcharts-3d.js"></script>
-
 <!-- custom js -->
-<script type="text/javascript" src="{% static 'assets/js/main.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'assets/pages/dashboard.js' %}"></script>
-<script type="text/javascript" src="{% static 'assets/pages/elements.js' %}"></script>
-<script src="{% static 'assets/js/menu.min.js' %}"></script>
 <script src="{% static 'custom.js' %}"></script>
+<script>
+    $(document).on('click','.login-btn', function(e){
+        e.preventDefault();
+        var array = $('form.login-form').serializeArray();
+        var from_data = {};
+        jQuery.each(array, function() {
+            from_data[this.name] = this.value || '';
+        });
 
+        console.log(from_data);
+        $.ajax({
+            url:'/api/login',
+            type:'POST',
+            data: from_data,
+            beforeSend:function(data){
+            },
+            success:function(data){
+                // check success response
+                if(data['type'] == 'success'){
+                    window.location.assign('/users-dashboard');
+                } else {
+                    alert(data['message']);
+                }
+            },
+            error:function(data){
+                response = data['responseJSON'];
+                console.log(response['message'])
+            }
+        })
+    })
+
+</script>
 
 </body>
 
