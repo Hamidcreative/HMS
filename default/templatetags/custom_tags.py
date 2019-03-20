@@ -38,3 +38,9 @@ def isPharmacist(request):
 	if getUserGroup(request) == 'Pharmacist':
 		return True
 	return False
+
+@register.filter
+def isHospitalAdmin(request):
+	if getUserGroup(request) == 'Hospital Admin':
+		return True
+	return False

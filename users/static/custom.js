@@ -17,6 +17,12 @@ function searchOrderFn(table){
 
         table.ajax.url(ajax_url+'&ordering='+column_name);
     })
+    // datatble on page change 
+    table.on( 'page.dt', function () {
+        var info = table.page.info();
+        table.ajax.url(ajax_url+'&page='+info)
+        // $('#pageInfo').html( 'Showing page: '+info.page+' of '+info.pages );
+    });
 }
 
 

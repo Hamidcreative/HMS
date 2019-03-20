@@ -3,7 +3,9 @@
 
 
 {% block content %}
-
+<style>
+    .latest-records-wrap{padding-left:2px;padding-right:2px;}
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="main-header">
@@ -58,7 +60,7 @@
 
     <!-- 2-1 block start -->
     <div class="row">
-        <div class="col-xl-4 col-lg-12">
+        <div class="col-xl-4 col-lg-12" >
             <div class="card">
                 <div class="card-block">
 
@@ -75,32 +77,32 @@
                             </thead>
 
                         </table>
-                        <h6 class="p-l-20"><a href="{% url 'student_listing' %}">View all</a></h6>
+                        <h6 class="p-l-20"><a href="{% url 'users_listing' %}">View all</a></h6>
 
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-12">
-        <div class="card">
-            <div class="card-block">
+        <div class="col-xl-4 col-lg-12 latest-records-wrap">
+            <div class="card">
+                <div class="card-block">
 
-                <div class="table-responsive">
-                    <h6 class="p-20">Hospitals</h6>
-                    <table cellspacing="0" id="hospitals"  class="datatable table table-small-font table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th data-priority="2">Name</th>
-                            <th data-priority="2">Detail</th>
-                            <th data-priority="6">Status</th>
-                        </tr>
-                        </thead>
-                    </table>
-                    <h6 class="p-l-20"><a href="{% url 'hospitals-listing' %}">View all</a></h6>
+                    <div class="table-responsive">
+                        <h6 class="p-20">Hospitals</h6>
+                        <table cellspacing="0" id="hospitals"  class="datatable table table-small-font table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th data-priority="2">Name</th>
+                                <th data-priority="2">Detail</th>
+                                <th data-priority="6">Status</th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <h6 class="p-l-20"><a href="{% url 'hospitals-listing' %}">View all</a></h6>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
         <div class="col-xl-4 col-lg-12">
             <div class="card">
                 <div class="card-block">

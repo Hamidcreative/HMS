@@ -52,11 +52,11 @@
 </head>
 
 <body class="sidebar-mini fixed">
+<div class="wrapper">
 <div class="loader-bg">
     <div class="loader-bar">
     </div>
 </div>
-<div class="wrapper">
     <!-- Navbar-->
     <header class="main-header-top hidden-print">
         <!--<a href="{%  url 'users_dashboard' %}" class="logo"><img class="img-fluid able-logo" src="{% static 'assets/images/logo.png' %}" alt="Hospital"></a>-->
@@ -202,6 +202,8 @@
         {% include "default/sidebar/doctor.html" %}
     {% elif request|isPharmacist %}
         {% include "default/sidebar/pharmacy.html" %}
+    {% elif request|isHospitalAdmin %}
+        {% include "default/sidebar/university.html" %}
     {% else %}
         {% include "default/sidebar/admin.html" %}
     {% endif %}

@@ -4,12 +4,17 @@ from crispy_forms.layout import Layout, Row, Field
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from .models import User, Profile, Appointment
+from default.templatetags.custom_tags import *
 
 class UserCreationform(UserCreationForm):
     email = forms.EmailField()
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=True, initial=0)
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
         super(UserCreationform, self).__init__(*args, **kwargs)
+        # here check if the user is Hospital Admin, then he can only add doctor or user
+        self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=Group.objects.filter(name__in=['Doctor','Student']), required=True, initial=0)
+
         self.helper = FormHelper()
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
@@ -85,7 +90,8 @@ class Studentform(forms.ModelForm):
         super(Studentform, self).__init__(*args, **kwargs)
         if user is not None:
             self.fields['user'] = forms.ModelChoiceField(queryset=User.objects.filter(id=user.id), empty_label=None)
-        
+        self.fields['weight'].label = 'Weight (In Kg)'
+        self.fields['height'].label = 'Height (In Feet)'
         self.fields['notes'].widget.attrs['rows'] = 3
         self.helper = FormHelper()
         self.helper.layout = Layout(

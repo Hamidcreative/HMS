@@ -10,11 +10,9 @@
             <div class="main-header">
                 <h4>Appointments</h4>
                 <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                    <li class="breadcrumb-item"><a href="index.html"><i class="icofont icofont-home"></i></a>
+                    <li class="breadcrumb-item"><a href="/"><i class="icofont icofont-home"></i></a>
                     </li>
                     <li class="breadcrumb-item"><a href="#!">Appointments</a>
-                    </li>
-                    <li class="breadcrumb-item"><a href="#">List</a>
                     </li>
                 </ol>
             </div>
@@ -35,11 +33,15 @@
                             <tr>
                                 <th data-priority="1">ID</th>
                                 <th data-priority="2">Student</th>
+                                {% if not request|isDoctor %}
                                 <th data-priority="6">Doctor</th>
+                                {% endif %}
                                 <th data-priority="6">Date Time</th>
                                 <th data-priority="6">Disease</th>
                                 <th data-priority="6">Notes</th>
+                                {% if not request|isDoctor %}
                                 <th data-priority="6">Status</th>
+                                {% endif %}
                                 <th data-priority="6">Action</th>
                             </tr>
                             </thead>
@@ -57,6 +59,7 @@
 <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script>
     jQuery(document).ready(function($) {
+        {% if not request|isDoctor %}
         var table = $('#appointments').DataTable({
             "serverSide": true,
             "responsive": true,
@@ -95,6 +98,30 @@
 
             ],
         });
+        {% else %}
+        var table = $('#appointments').DataTable({
+            "serverSide": true,
+            "responsive": true,
+            "ajax":{
+                url:"api/appointments?format=datatables",
+                headers: { 'Authorization': 'Token {{request|getToken}}' },
+                },
+            "columns": [
+                {"data": "id", "searchable": false},
+                {"data": "student"},
+                {"data": "datetime"},
+                {"data": "disease"},
+                {"data": "notes"},
+                {
+                    data: "action",
+                    render: function ( data, type, row, meta ) {
+                        return '<a href="/appointments/'+row.id+'/detail" class="tabledit-edit-button btn btn-mini btn-primary waves-effect waves-light"><span class="icofont icofont-open-eye"></span></a>';
+                    }
+                },
+
+            ],
+        });
+        {% endif %}
         searchOrderFn(table);
     });
 </script>

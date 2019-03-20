@@ -18,15 +18,33 @@ from rest_framework import permissions
 from rest_framework import filters
 from datetime import date
 from .forms import *
-from default.utils import *
 from default.templatetags.custom_tags import *
+from default.utils import *
+from rest_framework.pagination import PageNumberPagination
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+# ---------User views --------------#
 class UserViewSet(viewsets.ModelViewSet):
+
     queryset = User.objects.all()
     serializer_class = UsersSerializer
     filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
     ordering_fields = ('id','username', 'email', 'first_name', 'last_name', 'groups')
     search_fields = ('username', 'email', 'first_name', 'last_name', 'groups__name')
+
+    def list(self, request):
+        print('we are here -----------')
+        if isApiUserHospitalAdmin(request):
+            self.queryset = User.objects.filter(groups__name__in=['Student','Doctor'])
+
+        # serializer = UsersSerializer(self.queryset, many=True)
+        serializer = UsersSerializer(self.filter_queryset(self.queryset), many=True)
+        return Response(serializer.data)
+
 
     def perform_create(self, serializer):
         return serializer.save()
@@ -50,10 +68,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
     ordering_fields = ('user_id')
 
 def users_listing(request):
-    return render(request,'users/user//listing.html')
+    return render(request,'users/user/listing.html')
 
 def add_user(request):
-    form = UserCreationform()
+    form = UserCreationform(request=request)
     context = { 'form' : form, 
                 'app':'users',
                 'type':'POST',
@@ -65,7 +83,7 @@ def add_user(request):
 
 def edit_user(request, id):
     user = get_object_or_404(User, id=id)
-    form = UserCreationform(request.POST or None, instance=user)
+    form = UserCreationform(request.POST or None, instance=user,request=request)
     group = user.groups.values_list('name', flat=True).first()
     profile_form  = ''
     try:
@@ -88,12 +106,22 @@ def edit_user(request, id):
 
     return render(request,'users/user/form.html',context)
 
+# ---------Appointment views --------------#
+
 class AppointmentsViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentsSerializer
     filter_backends = (filters.OrderingFilter,filters.SearchFilter,)
-    ordering_fields = ('id','student__username', 'doctor__username', 'datetime', 'disease', 'notes', 'status')
+    ordering_fields = ('id','student', 'doctor', 'datetime', 'disease', 'notes', 'status')
     search_fields = ('id','student__username', 'doctor__username', 'datetime', 'disease', 'notes', 'status')
+
+    def list(self, request):
+        if isApiUserDoctor(request):
+            self.queryset = self.queryset.filter(doctor_id=request.user.id)
+
+        # serializer = UsersSerializer(self.queryset, many=True)
+        serializer = AppointmentsSerializer(self.filter_queryset(self.queryset), many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
        serializer.save(user=self.request.user)
@@ -111,14 +139,10 @@ def add_appointment(request):
                 }
     return render(request, 'users/appointments/form.html',context)
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('users', request=request, format=format),
-        'students': reverse('students', request=request, format=format),
-        'doctors': reverse('doctors', request=request, format=format),
-        'hospitals': reverse('hospitals', request=request, format=format),
-    })
+def appointment_detail(request, id):
+
+    return render(request,'users/appointments/detail.html', {'appointment_id':id} )
+
 
 def users_dashboard(request):
     return render(request,'users/dashboard.html')
@@ -130,10 +154,6 @@ class DoctorsViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorsSerializer
     def perform_create(self, serializer):
        serializer.save()
-
-def doctors_listing(request):
-    tokens = request.session.get('token')
-    return render(request,'users/doctors/doctors.html',{'token': tokens,})
 
 def add_doctor(request):
     context = {'form' : Doctorsform,'app':'doctors','type':'POST','app_url':'doctors'}
@@ -147,13 +167,18 @@ def edit_doctor(request, user_id):
 
 class StudentViewSet(viewsets.ModelViewSet):
 
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = StudentSerializer
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
        serializer.save(user=self.request.user)
 
-def student_listing(request):
-    tokens = request.session.get('token')
-    return render(request,'users/students/studemts.html',{'token': tokens,})
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('users', request=request, format=format),
+        'students': reverse('students', request=request, format=format),
+        'doctors': reverse('doctors', request=request, format=format),
+        'hospitals': reverse('hospitals', request=request, format=format),
+    })
