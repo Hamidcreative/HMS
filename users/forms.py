@@ -125,15 +125,15 @@ class Adminform(forms.ModelForm):
 
 class Appointmentform(forms.ModelForm):
 
+    doctor_id = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Doctor'), empty_label=None)
+    student_id = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Student'), empty_label=None)
     def __init__(self, *args, **kwargs):
         super(Appointmentform, self).__init__(*args, **kwargs)
-        self.fields['student'] = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Student'), empty_label=None)
-        self.fields['doctor'] = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Doctor'), empty_label=None)
         self.helper = FormHelper()
         self.helper.layout = Layout(
                 Row(
-                    Field('student', wrapper_class='col-sm-4'),
-                    Field('doctor', wrapper_class='col-sm-4'),
+                    Field('student_id', wrapper_class='col-sm-4'),
+                    Field('doctor_id', wrapper_class='col-sm-4'),
                     Field('datetime', wrapper_class='col-sm-4') 
                 ),
                 Row(
@@ -146,6 +146,6 @@ class Appointmentform(forms.ModelForm):
         self.fields['notes'].widget.attrs['rows'] = 3
     class Meta:
         model  = Appointment
-        fields = ['student','doctor','disease','datetime','notes','status']
+        fields = ['student_id','doctor_id','disease','datetime','notes','status']
 
         

@@ -36,13 +36,18 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id','username', 'email', 'first_name', 'last_name', 'groups')
     search_fields = ('username', 'email', 'first_name', 'last_name', 'groups__name')
 
-    def list(self, request):
-        print('we are here -----------')
-        if isApiUserHospitalAdmin(request):
-            self.queryset = User.objects.filter(groups__name__in=['Student','Doctor'])
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
 
-        # serializer = UsersSerializer(self.queryset, many=True)
-        serializer = UsersSerializer(self.filter_queryset(self.queryset), many=True)
+        if isApiUserHospitalAdmin(request):
+            queryset = queryset.filter(groups__name__in=['Student','Doctor'])
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -115,16 +120,22 @@ class AppointmentsViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id','student', 'doctor', 'datetime', 'disease', 'notes', 'status')
     search_fields = ('id','student__username', 'doctor__username', 'datetime', 'disease', 'notes', 'status')
 
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        
         if isApiUserDoctor(request):
-            self.queryset = self.queryset.filter(doctor_id=request.user.id)
+            queryset = queryset.filter(doctor_id=request.user.id)
 
-        # serializer = UsersSerializer(self.queryset, many=True)
-        serializer = AppointmentsSerializer(self.filter_queryset(self.queryset), many=True)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-    def perform_create(self, serializer):
-       serializer.save(user=self.request.user)
+        
+    # def perform_create(self, serializer):
+    #    serializer.save(user=self.request.user)
 
 def appointments_listing(request):
     return render(request,'users/appointments/listing.html')
