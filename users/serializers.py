@@ -95,6 +95,15 @@ class StudentSerializer(serializers.ModelSerializer):   #  used to get user prof
 class AppointmentsSerializer(serializers.ModelSerializer):   #  used to get user Appointments
     student = serializers.CharField(source='student.username', read_only=True)
     doctor  = serializers.CharField(source='doctor.username', read_only=True)
+    def create(self, validated_data):
+
+        # Create the object instance...
+        request = self.context.get("request")
+        print(request.data)
+        validated_data['doctor'] = User.objects.get(id=request.data['doctor_id'])
+        validated_data['student'] = User.objects.get(id=request.data['student_id'])
+        appointment = Appointment.objects.create(**validated_data)
+        return appointment    
 
     class Meta:
         model = Appointment
